@@ -1,12 +1,13 @@
 
-# Repebble demo: basic MCP
+# repebble MCP demo
 
 For **Pebble / Index 01’s MCP Sandbox**, use a standard **Streamable HTTP** MCP server. Pebble accepts bearer-token authentication; OAuth login flows are currently unsupported. ([Pebble Help Center][1])
 
 ```fish
-# export MCP_TOKEN="$(uv run python -c 'import secrets; print(secrets.token_urlsafe(32))')"
-set -gx MCP_TOKEN 'xyz'
-printf 'Authorization: Bearer %s\n' "$MCP_TOKEN"
+# export mcpcassini_mcp_token="$(uv run python -c 'import secrets; print(secrets.token_urlsafe(32))')"
+set -gx mcpcassini_mcp_token 'xyz'
+set -gx mcpcassini_mcp_port 8090
+printf 'Authorization: Bearer %s\n' "$mcpcassini_mcp_token"
 uv run main.py
 ```
 
@@ -14,7 +15,7 @@ In separate terminal:
 
 ```bash
 # brew install cloudflared 
-cloudflared tunnel --url http://127.0.0.1:8000
+cloudflared tunnel --url http://127.0.0.1:$mcpcassini_mcp_port
 # copy temp url eg. url=`https://robin-prizes-hawaiian-balance.trycloudflare.com`
 ```
 
@@ -24,7 +25,7 @@ JSON responses because Cloudflare’s temporary tunnels do not support SSE strea
 In Pebble, **MCP & Tool Settings**, create a sandbox group using **Default**, not **Index Agent**. Under **MCP Servers**, add: ([Pebble Help Center][1])
 * URL: `$url/mcp`
 * transport: streamable HTTP
-* auth: `Bearer $MCP_TOKEN`
+* auth: `Bearer $mcpcassini_mcp_token`
 * setup group `$g`
 
 Assign `$g` to **Double click and hold** in the Index settings.
