@@ -7,7 +7,7 @@
 
 import os
 host = "127.0.0.1"
-port = os.environ.get("repebble_mcp_port", 8090)
+port = os.environ.get("repebble_port", 8090)
 
 from fastmcp import FastMCP
 from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
@@ -16,7 +16,7 @@ mcp = FastMCP(
     "Pebble demo",
     auth=StaticTokenVerifier(
         tokens={
-            os.environ["repebble_mcp_token"]: {"client_id": "pebble", "scopes": []}
+            os.environ["repebble_token"]: {"client_id": "pebble", "scopes": []}
         }
     ),
 )
