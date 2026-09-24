@@ -7,7 +7,7 @@
 
 import os
 host = "127.0.0.1"
-port = os.environ.get("repebble_port", 8090)
+port = int(os.environ.get("mcpcassini_port", 8090))
 
 from fastmcp import FastMCP
 from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
@@ -15,9 +15,7 @@ from fastmcp.server.auth.providers.jwt import StaticTokenVerifier
 mcp = FastMCP(
     "Pebble demo",
     auth=StaticTokenVerifier(
-        tokens={
-            os.environ["repebble_token"]: {"client_id": "pebble", "scopes": []}
-        }
+        tokens={os.environ["mcpcassini_token"]: {"client_id": "pebble", "scopes": []}}
     ),
 )
 
@@ -30,10 +28,4 @@ def hello(name: str) -> str:
 
 if __name__ == "__main__":
     print(f'{host}:{port}')
-    mcp.run(
-        transport="http",
-        host=host,
-        port=port,
-        stateless_http=True,
-        json_response=True,
-    )
+    mcp.run(transport="http", host=host, port=port, stateless_http=True, json_response=True)
